@@ -2,73 +2,86 @@
 
 import { motion, useInView, useAnimation, Variants } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { EXPO_OUT } from "@/lib/motionConfig";
+import { cn } from "@/lib/utils";
 
-type SplitTextProps = {
-  children: string;
-  className?: string;
-  delay?: number;
-};
+interface SplitTextProps {
+    children: string;
+    className?: string;
+    delay?: number;
+    stagger?: number;
+    as?: "h1" | "h2" | "h3" | "h4" | "p" | "span" | "div";
+}
 
-export const SplitText = ({ children, className, delay = 0 }: SplitTextProps) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const controls = useAnimation();
+export const SplitText = ({
+    children,
+    className,
+    delay = 0,
+    stagger = 0.04,
+    as = "div",
+}: SplitTextProps) => {
+    const ref = useRef<any>(null);
+    const isInView = useInView(ref, { once: true, margin: "-40px" });
+    const controls = useAnimation();
 
-  useEffect(() => {
-    if (isInView) {
-      controls.start("visible");
-    }
-  }, [isInView, controls]);
+    useEffect(() => {
+        if (isInView) {
+            controls.start("visible");
+        }
+    }, [isInView, controls]);
 
-  const words = children.split(" ");
+    const words = children.split(" ");
 
-  const container: Variants = {
-    hidden: { opacity: 0 },
-    visible: (i = 1) => ({
-      opacity: 1,
-      transition: { staggerChildren: 0.05, delayChildren: delay * i },
-    }),
-  };
+    const containerVariants: Variants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: stagger,
+                delayChildren: delay,
+            },
+        },
+    };
 
-  const child: Variants = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: "blur(0px)",
-      transition: {
-        type: "tween",
-        ease: "easeOut",
-        duration: 0.3,
-      },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-      filter: "blur(10px)",
-    },
-  };
+    const wordVariants: Variants = {
+        hidden: {
+            opacity: 0,
+            y: 24,
+            filter: "blur(8px)",
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            transition: {
+                duration: 0.6,
+                ease: EXPO_OUT,
+            },
+        },
+    };
 
-  return (
-    <motion.div
-      ref={ref}
-      style={{ display: "flex", flexWrap: "wrap", overflow: "hidden" }}
-      variants={container}
-      initial="hidden"
-      animate={controls}
-      className={className}
-    >
-      {words.map((word, i) => (
-        <motion.div
-          key={i}
-          style={{ display: "flex", marginRight: "0.25em", whiteSpace: "nowrap" }} // Add spacing between words
+    // Dynamically choose the proper semantic motion element to ensure valid HTML5 nesting
+    const MotionComponent = (motion as any)[as] || motion.div;
+
+    return (
+        <MotionComponent
+            ref={ref}
+            variants={containerVariants}
+            initial="hidden"
+            animate={controls}
+            className={cn("relative flex flex-wrap items-baseline gap-x-[0.25em]", className)}
+            aria-label={children}
         >
-          {Array.from(word).map((letter, index) => (
-            <motion.span variants={child} key={index}>
-              {letter}
-            </motion.span>
-          ))}
-        </motion.div>
-      ))}
-    </motion.div>
-  );
+            {words.map((word, i) => (
+                <motion.span
+                    key={i}
+                    variants={wordVariants}
+                    className="inline-block whitespace-nowrap will-change-transform"
+                    aria-hidden="true"
+                >
+                    {word}
+                </motion.span>
+            ))}
+        </MotionComponent>
+    );
 };

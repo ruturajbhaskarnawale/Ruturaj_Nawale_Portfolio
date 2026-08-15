@@ -42,7 +42,7 @@
     "rewrites": [
         {
             "source": "/resume",
-            "destination": "/RuturajNawale_30_01_2026_Resume.pdf"
+            "destination": "/RuturajNawale_Resume.pdf"
         }
     ]
 }
